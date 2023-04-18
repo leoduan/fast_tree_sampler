@@ -21,5 +21,6 @@ sourceCpp('tree_func.cpp')
 A_T<- abs(matrix(rnorm(100),10,10))
 A_T <- A_T+t(A_T)
 
-a<- randomWalkCover(A_T)
+a<- randomWalkCover(log(A_T))
 
+a

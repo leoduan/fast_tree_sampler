@@ -59,9 +59,9 @@ int gumbelMaxC(const vec& logWeight){
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
-mat randomWalkCover(const mat& W) {
+mat randomWalkCover(const mat& logW) {
   // Initialize variables
-  int n = W.n_rows;
+  int n = logW.n_rows;
   arma::mat A_T_(n, n, arma::fill::zeros);
   arma::Col<int> InTree(n, arma::fill::zeros);
   arma::Col<int> Next(n);
@@ -76,7 +76,7 @@ mat randomWalkCover(const mat& W) {
     int u = i;
     //do a random walk, until getting back to the tree
     while (!InTree(u)) {
-      int v = gumbelMaxC(W.col(u));
+      int v = gumbelMaxC(logW.col(u));
       Next(u) = v;
       u = v;
     }
