@@ -59,7 +59,7 @@ int gumbelMaxC(const vec& logWeight){
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
-mat randomWalkCover(const mat& logW) {
+mat randomWalkLoopErased(const mat& logW) {
   // Initialize variables
   int n = logW.n_rows;
   arma::mat A_T_(n, n, arma::fill::zeros);
@@ -93,6 +93,45 @@ mat randomWalkCover(const mat& logW) {
     A_T_(u, Next(u)) = 1;
     A_T_(Next(u), u) = 1;
   }
+  
+  return A_T_;
+}
+
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export]]
+mat randomWalkCover(const mat& logW) {
+  // Initialize variables
+  int n = logW.n_rows;
+  arma::mat A_T_(n, n, arma::fill::zeros);
+  arma::Col<int> InTree(n, arma::fill::zeros);
+  arma::Col<int> Prev(n);
+  
+  // Set up Next and InTree
+  int r = 0;
+  InTree(r) = 1;
+  
+  int u = r;
+  int NewNodeVisited = 1;
+  while (NewNodeVisited<n) {
+
+      //do a random walk util reaching a new node
+
+      int v = gumbelMaxC(logW.col(u));
+
+      if(!InTree(v)){
+          Prev(v)= u;
+          InTree(v)=1;
+          NewNodeVisited += 1;
+      };
+      u = v;
+    }
+
+  // Construct adjacency matrix
+  for (int u = 1; u < n; ++u)
+   {
+      A_T_(u, Prev(u)) = 1;
+      A_T_(Prev(u), u) = 1;
+   } 
   
   return A_T_;
 }

@@ -23,4 +23,4 @@ A_T <- A_T+t(A_T)
 
 a<- randomWalkCover(log(A_T))
 
-a
+b<- randomWalkLoopErased(log(A_T))
