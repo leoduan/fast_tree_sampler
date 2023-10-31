@@ -1,52 +1,52 @@
 #include <RcppArmadillo.h>
-#include <igraph.h>
+// #include <igraph.h>
 
 using namespace Rcpp;
 using namespace arma;
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
-mat findMinST(const mat& W) {
-  int n = W.n_rows;
-  igraph_t G, mst;
-  igraph_vector_t weights;
-  igraph_matrix_t adj_matrix_G, adj_matrix_MST;
+// mat findMinST(const mat& W) {
+//   int n = W.n_rows;
+//   igraph_t G, mst;
+//   igraph_vector_t weights;
+//   igraph_matrix_t adj_matrix_G, adj_matrix_MST;
   
-  igraph_vector_init(&weights, n * n);
-  igraph_matrix_init(&adj_matrix_G, n, n);
-  igraph_matrix_init(&adj_matrix_MST, n, n);
+//   igraph_vector_init(&weights, n * n);
+//   igraph_matrix_init(&adj_matrix_G, n, n);
+//   igraph_matrix_init(&adj_matrix_MST, n, n);
   
-  for (int i = 0; i < n; i++) {
-    for (int j = 0; j < n; j++) {
-      if (i != j) {
-        igraph_matrix_set(&adj_matrix_G,i,j, W(i, j));
-      }
-    }
-  }
+//   for (int i = 0; i < n; i++) {
+//     for (int j = 0; j < n; j++) {
+//       if (i != j) {
+//         igraph_matrix_set(&adj_matrix_G,i,j, W(i, j));
+//       }
+//     }
+//   }
   
-  igraph_weighted_adjacency(&G, &adj_matrix_G, IGRAPH_ADJ_UNDIRECTED, &weights,
-                            IGRAPH_NO_LOOPS);
+//   igraph_weighted_adjacency(&G, &adj_matrix_G, IGRAPH_ADJ_UNDIRECTED, &weights,
+//                             IGRAPH_NO_LOOPS);
   
-  mat A_T(n, n);
+//   mat A_T(n, n);
   
-  igraph_minimum_spanning_tree_prim(&G, &mst, &weights);
+//   igraph_minimum_spanning_tree_prim(&G, &mst, &weights);
   
-  igraph_get_adjacency(&mst, &adj_matrix_MST, IGRAPH_GET_ADJACENCY_BOTH, NULL,IGRAPH_NO_LOOPS);
+//   igraph_get_adjacency(&mst, &adj_matrix_MST, IGRAPH_GET_ADJACENCY_BOTH, NULL,IGRAPH_NO_LOOPS);
   
-  for (int i = 0; i < n; i++) {
-    for (int j = 0; j < n; j++) {
-      A_T(i, j) = MATRIX(adj_matrix_MST, i, j);
-    }
-  }
+//   for (int i = 0; i < n; i++) {
+//     for (int j = 0; j < n; j++) {
+//       A_T(i, j) = MATRIX(adj_matrix_MST, i, j);
+//     }
+//   }
   
-  igraph_destroy(&G);
-  igraph_destroy(&mst);
-  igraph_vector_destroy(&weights);
-  igraph_matrix_destroy(&adj_matrix_G);
-  igraph_matrix_destroy(&adj_matrix_MST);
+//   igraph_destroy(&G);
+//   igraph_destroy(&mst);
+//   igraph_vector_destroy(&weights);
+//   igraph_matrix_destroy(&adj_matrix_G);
+//   igraph_matrix_destroy(&adj_matrix_MST);
   
-  return A_T;
-}
+//   return A_T;
+// }
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
